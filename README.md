@@ -9,6 +9,10 @@ The kernel version should appear in several strings (in [`linux_banner`](https:/
 
 Searching for "Linux version" should do it.
 
+Once you have the exact version, you can retrieve it either:
+  * by looking for the tarball of the official release on [kernel.org](https://mirrors.edge.kernel.org/pub/linux/kernel/). 
+  * or by cloning the [linux-stable](git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git) repository.
+
 ## Extracting kallsyms
 
 If the kernel is compiled with CONFIG_KALLSYMS, non-static symbols are contained in the Linux image.
