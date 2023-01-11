@@ -1,7 +1,15 @@
 # linux-kernel-reverse
 
-Steps to reverse engineer a custom Linux kernel (for dynamic and static analysis).
+Steps to reverse engineer a custom Linux kernel (for dynamic and static analysis, aka QEMU and Ghidra).
 Mainly notes to myself.
+
+## Putting the kernel in an ELF
+
+The first step we may want to do is to convert the raw vmlinux to an ELF. 
+Delimiting the sections with the permissions (.text, .data, .bss mainly) will allow us to load it directly into Ghidra.
+Il will also serve as a container for the debug infos that we will add in the rest of the document.
+
+Note that if the raw image is a bzImage, we must extract the vmlinux and wrap this file.
 
 ## Getting the kernel version
 
@@ -24,3 +32,30 @@ We can extract them in several ways:
   * or use Unicorn/angr to emulate the function `kallsyms_on_each_symbol`).
 
 Once we do that, we should get a text file with the address, type and name of each symbol.
+
+## Adding symbols
+
+We can then use a tool (?) to add the symbols to the ELF file.
+This will be recognized by Ghidra and GDB.
+
+## Compiling the kernel
+
+For dynamic and static analysis, we need to know the structures used by the kernel.
+We can get them from the vanilla kernel.
+For this, we will compile the vanilla kernel, and use the DWARF information to recover the types.
+
+However, the structures are highliy dependent on the kernel configuration.
+So we must guess the kernel configuration as close as possible.
+We can do this by trial and error.
+
+We compile the vanilla kernel with an given configuration, and get a vmlinux.
+To make sure we have a similar configuration, we can compare the kallsyms of both vmlinux.
+
+Once we have a valid vmlinux, we can use Ghidra to extract the DWARF information, and add them to our proprietary vmlinux.
+We can make sure that the offset of the structure members makes sense.
+
+We can then add the DWARF information to our ELF file.
+
+## Unwind info
+
+TODO
